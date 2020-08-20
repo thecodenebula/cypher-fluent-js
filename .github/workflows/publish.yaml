@@ -3,6 +3,8 @@ on:
   release:
     types: [created]
   push: { branches: [main] }
+env:
+  TAG: latest
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,8 +16,8 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: npm install
       - run: npm run build
-      - run: npm version next
+      - run: npm version ${{ github.run_id }} && echo "::set-env name=TAG::vnext"
         if: github.ref == 'refs/heads/main'
-      - run: npm publish
+      - run: npm publish --tag $TAG
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
