@@ -1,0 +1,44 @@
+{
+  "name": "@thecodenebula/cypher-fluent-js",
+  "version": "1.0.0",
+  "description": "Immutable and fluent library to generate cypher queries ",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "keywords": [
+    "neo4j",
+    "cypher",
+    "fluent",
+    "query",
+    "builder"
+  ],
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "test": "jest",
+    "build": "tsc --build",
+    "build:watch": "tsc --watch",
+    "prettier": "prettier . --write",
+    "prettier:watch": "onchange '**/*.(ts|json)' -- prettier --write {{changed}}"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thecodenebula/cypher-fluent-js.git"
+  },
+  "author": "Rafael Abreu <grillorafael@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thecodenebula/cypher-fluent-js/issues"
+  },
+  "homepage": "https://github.com/thecodenebula/cypher-fluent-js#readme",
+  "devDependencies": {
+    "@types/jest": "^26.0.10",
+    "jest": "^26.4.0",
+    "onchange": "^7.0.2",
+    "prettier": "^2.0.5",
+    "ts-jest": "^26.2.0",
+    "typescript": "^4.0.2"
+  },
+  "dependencies": {}
+}

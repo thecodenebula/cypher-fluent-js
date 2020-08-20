@@ -1,0 +1,150 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`query builder should do basic where statements 1`] = `
+"MATCH (n)
+WHERE ((n.name = 'Mike'))
+RETURN n"
+`;
+
+exports[`query builder should do basic where statements 2`] = `
+"MATCH (n)
+WHERE ((n.name = $name))
+RETURN n"
+`;
+
+exports[`query builder should do basic where statements 3`] = `
+"MATCH (n)
+WHERE ((n.name = $name) AND ((n.age = 30))) AND (((n.city = $city) OR ((n.country = $country))))
+RETURN n"
+`;
+
+exports[`query builder should do basic where statements 4`] = `
+"MATCH (n)
+WHERE ((n.name = $name) AND ((n.age = 30)) OR ((n.city = $city) OR ((n.country = $country))))
+RETURN n"
+`;
+
+exports[`query builder should do basic where statements 5`] = `
+"MATCH (m)
+WHERE ((m.name IS NULL))
+AND
+((m.name starts with 'rafa'))
+AND
+((m.name ends with 'rafa'))
+AND
+((m.name contains 'rafa'))
+AND
+((m.name =~ 'Tim.*'))
+AND
+((m.name = $name))
+AND
+((m.name in $name))
+AND
+((m.age > $age))
+AND
+((m.age >= $age))
+AND
+((m.age < $age))
+AND
+((m.age <= $age))
+RETURN m"
+`;
+
+exports[`query builder should do basic where statements 6`] = `
+"MATCH (m)
+WHERE ((NOT (m.name = 'John')))
+RETURN m"
+`;
+
+exports[`query builder should do basic where statements 7`] = `
+"MATCH (m)
+WHERE ((m:Actor))
+RETURN m"
+`;
+
+exports[`query builder should do basic where statements 8`] = `
+"MATCH (m)
+WHERE ((m:Actor:Person))
+RETURN m"
+`;
+
+exports[`query builder should do basic where statements 9`] = `
+"MATCH (m:Person)
+WHERE ((exists((m)-[:LOVES]-())))
+RETURN m"
+`;
+
+exports[`query builder should do basic where statements 10`] = `
+"MATCH (m)
+WHERE ((exists{ MATCH (m)-[:LOVES]-() }))
+RETURN m"
+`;
+
+exports[`query builder should do basic where statements 11`] = `
+"MATCH (m)
+WHERE (((m)-[:LOVES]-()))
+RETURN m"
+`;
+
+exports[`query builder should do basic where statements 12`] = `
+"MATCH (m)
+WHERE ((exists{ MATCH (m)
+WHERE ((exists{ MATCH (m)-[:LOVES]-() })) }))
+RETURN m"
+`;
+
+exports[`query builder should match basic queries 1`] = `
+"MATCH (actor:Actor), (person:Person)
+RETURN actor, person"
+`;
+
+exports[`query builder should match basic queries 2`] = `
+"MATCH (n1)
+OPTIONAL MATCH (n2)
+RETURN n1"
+`;
+
+exports[`query builder should match basic queries 3`] = `
+"MATCH (n1)--(n2)
+RETURN n1"
+`;
+
+exports[`query builder should match basic queries 4`] = `
+"MATCH (n1)--(n2)--(n3)
+RETURN n1"
+`;
+
+exports[`query builder should match basic queries 5`] = `
+"MATCH (n1)-->(n2)
+RETURN n1"
+`;
+
+exports[`query builder should match basic queries 6`] = `
+"MATCH (n1)-[:LOVES]-(n2)
+RETURN n1"
+`;
+
+exports[`query builder should match basic queries 7`] = `
+"MATCH (actor:Actor), (person:Person)
+RETURN actor, person
+ORDER BY actor.name asc
+SKIP 10
+LIMIT 100"
+`;
+
+exports[`query builder should match basic queries 8`] = `
+"MATCH (actor:Actor), (person:Person)
+RETURN actor, person
+ORDER BY actor.name asc
+SKIP $skip
+LIMIT $limit"
+`;
+
+exports[`query builder should render call queries 1`] = `
+"CALL db.index.fulltext.queryNodes YIELD node, score
+WHERE (($labelRestriction in labels(node)))
+RETURN node, labels(node), score
+ORDER BY score DESC
+SKIP $offset
+LIMIT $limit"
+`;
