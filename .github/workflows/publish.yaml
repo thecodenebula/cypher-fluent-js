@@ -16,7 +16,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - run: npm install
       - run: npm run build
-      - run: npm version ${{ github.run_id }} && echo "::set-env name=TAG::vnext"
+      - run: npm version 0.${{ github.run_number }}-main && echo "::set-env name=TAG::vnext"
         if: github.ref == 'refs/heads/main'
       - run: npm publish --tag $TAG
         env:
