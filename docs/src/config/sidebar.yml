@@ -1,0 +1,6 @@
+- label: 'Introduction'
+  link: '/'
+- label: Usage
+  items:
+    - label: 'Basic Query'
+      link: '/usage/basic-query'

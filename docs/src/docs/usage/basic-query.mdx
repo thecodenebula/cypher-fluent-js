@@ -1,0 +1,153 @@
+---
+title: Basic Query
+---
+
+`cypher-fluent-js` provides a fluent interface to build cypher queries. The main queries are built from match statements
+as exemplified below.
+
+
+## Simple match
+
+```typescript
+import { match, node } from '@thecodenebula/cypher-fluent-js';
+
+/*
+MATCH (actor: Actor)
+RETURN actor
+SKIP 0
+LIMIT 100
+*/
+
+const query = match(node('actor', 'Actor')).return('actor').skip(0).limit(100).build();
+```
+
+## Matching relationships
+
+```typescript
+import { match, node, relationship, RelationshipDirection } from '@thecodenebula/cypher-fluent-js';
+
+/*
+MATCH (actor: Actor)-[actedWith: ACTED_WITH]-(otherActor: Actor)
+return actor, otherActor
+*/
+
+const query = match(
+  relationship(node('actor', 'Actor'), node('otherActor', 'Actor'), 'actedWith', 'ACTED_WITH', RelationshipDirection.ANY)
+).return('actor', 'otherActor');
+```
+
+## Matching with where
+
+```typescript
+import { match, node, gte, variable, raw } from '@thecodenebula/cypher-fluent-js';
+
+/*
+MATCH (actor: Actor)
+WHERE actor.bornYear >= $actorAge
+RETURN actor
+*/
+
+const query = match(
+  node('actor', 'Actor')
+).where(gte(raw('actor.bornYear'), variable('actorAge'))).return('actor');
+```
+
+## CALL queries
+
+```typescript
+import { callQ, call, node, value, variable } from '@thecodenebula/cypher-fluent-js';
+
+/*
+CALL db.index.fulltext.queryNodes YIELD node, score
+RETURN node, labels(node), score
+ORDER BY score DESC
+SKIP $offset
+LIMIT $limit
+*/
+
+const query = callQ(
+  call('db.index.fulltext.queryNodes').args(value('fullText'), variable('q')).yield('node', 'score')
+)
+  .return('node', 'labels(node)', 'score')
+  .orderBy('score DESC')
+  .skip(variable('offset'))
+  .limit(variable('limit'));
+```
+
+## Match with exists
+
+```typescript
+import { match, node, exists, relationship } from '@thecodenebula/cypher-fluent-js';
+
+/*
+MATCH (m)
+WHERE ((exists{ MATCH (m)-[:LOVES]-() }))
+RETURN m"
+*/
+
+const query = match(node('m')).where(exists(match(relationship(node('m'), node(), '', 'LOVES')))).return('m');
+
+```
+
+## Match where pattern
+
+```typescript
+import { match, relationship, pattern, node } from '@thecodenebula/cypher-fluent-js';
+
+/*
+MATCH (m)
+WHERE (((m)-[:LOVES]-()))
+RETURN m
+*/
+
+const query = match(node('m')).where(pattern(relationship(node('m'), node(), '', 'LOVES'))).return('m');
+```
+
+## Compose and enrich queries
+
+Queries can be enriched as you add to them. At every operation, a new instance of query is returned.
+
+### Enrich wheres with AND
+
+```typescript
+import { match, node, gte, value, raw, lte } from '@thecodenebula/cypher-fluent-js';
+
+function complexActorQuery({ bornYearLte, bornYearGte}) {
+  let query = match(node('actor', 'Actor')).return('actor');
+
+  if (bornYearLte) {
+    query = query.where(lte(raw('actor.bornYear'), value(bornYearLte)));
+  }
+
+  if (bornYearGte) {
+      query = query.where(gte(raw('actor.bornYear'), value(bornYearGte)));
+    }
+
+  return query;
+}
+
+```
+
+### Build partial query
+
+```typescript
+import { match, gte, raw, value, node } from '@thecodenebula/cypher-fluent-js';
+
+const query = match(node('a')).where(gte(raw('a.bornYear', value(1995))));
+
+const returnQuery = query.return('a');
+const countQuery = query.return('count(a)');
+
+/*
+returnQuery:
+MATCH (a)
+WHERE a.bornYear >= 1995
+RETURN a
+
+countQuery:
+MATCH (a)
+WHERE a.bornYear >= 1995
+RETURN count(a)
+*/
+
+```

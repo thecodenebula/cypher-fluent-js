@@ -1,0 +1,35 @@
+# Introduction
+
+## Install
+
+Install cypher-fluent-js library
+
+```bash
+# Using NPM:
+npm install @thecodenebula/cypher-fluent-js --save
+
+# Using Yarn:
+yarn add @thecodenebula/cypher-fluent-js
+```
+
+## Example usage
+
+```js title=gatsby-config.js
+import neo4j from 'neo4j-driver';
+import { match, node } from '@thecodenebula/cypher-fluent-js';
+
+const driver = neo4j.driver(uri, neo4j.auth.basic('user', 'password'));
+const session = driver.session()
+
+const query = match(node('actor', 'Actor'))
+      .return('actor', 'person')
+      .skip(10)
+      .limit(100)
+      .orderBy('actor.name asc');
+
+const result = driver.run(query.build());
+```
+
+<br />
+
+[Basic queries!](/usage/basic-query)
